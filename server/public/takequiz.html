@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="container1">
+        <button id="takequizbutton">Take Quiz</button>
+    </div>
+    <div id="questioncontainer" style="display: none;">
+        <div id="question">
+            <form  id="form1">
+                <p id="paraquiz"></p>
+               <input type="radio" name="choice" value="1" >
+               <p id="op1"></p>
+                <p id="op2"></p><input type="radio" name="choice" value="2" >
+                
+                <p id="op3"></p><input type="radio" name="choice" value="3">
+                
+                <p id="op4"></p> <input type="radio" name="choice" value="4">
+               
+                <input type="submit"  id="next"  onclick="makeQuestion()">
+              
+            </form>
+        </div>
+
+    </div>
+</body>
+<script>
+     b = document.getElementById("takequizbutton");
+     n = document.getElementById("next");  
+    var i = -2;
+    var arr;
+    b.addEventListener('click', function () {
+        alert('32')
+        var con1 = document.getElementById("container1");
+        con1.style.display = "none";
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', '/takequiz', true);
+        xhr.onload = function () {
+            console.log(xhr.responseText+"response text");
+            arr = JSON.parse(xhr.responseText);
+            makeQuestion();
+        }
+        xhr.send();
+    });
+
+    b.addEventListener('click', () => {
+        alert(46)
+        document.cookie = "startedquiz=yes";
+    });
+
+    n.addEventListener('click', function (e) {
+   
+        choice = document.getElementsByName("choice");
+        if(choice[0].checked){
+            alert("1");
+        }else if(choice[1].checked){
+            alert("2");
+        }else if(choice[2].checked){
+            alert("3");
+        }else if(choice[3].checked){
+            alert("4");
+        }else{
+            alert("none");
+        }
+        
+        // const xhr = new XMLHttpRequest();
+        // xhr.open('POST', '/takequiz', true);
+        // xhr.setRequestHeader('Content-type', 'application/json');
+        // xhr.send(tosend);
+         e.preventDefault();
+    });
+    
+
+    function makeQuestion() {
+        var next = document.getElementById("questioncontainer");
+        next.style.display = "block";
+        i += 2;
+        document.getElementById("paraquiz").innerHTML=arr[i].Question+"/"+arr[i + 1].Question;
+        document.getElementById("op1").innerHTML=arr[i].Option1+"/"+arr[i + 1].Option1;
+        document.getElementById("op2").innerHTML=arr[i].Option2+"/"+arr[i + 1].Option2;
+        document.getElementById("op3").innerHTML=arr[i].Option3+"/"+arr[i + 1].Option3;
+        document.getElementById("op4").innerHTML=arr[i].Option4+"/"+arr[i + 1].Option4;
+        
+    }
+
+   
+
+</script>
+
+</html>
