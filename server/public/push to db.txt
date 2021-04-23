@@ -1,5 +1,0 @@
-push to db
-preview xl
-show sample template
-previous questions
-show options to choose sheet

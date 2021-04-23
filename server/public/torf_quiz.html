@@ -113,12 +113,11 @@
                 color: white;
                 font-weight: 600;
             }
-           
+        
 
- 
             
         </style>
-		<script type="text/javascript" src="quiz.js"></script>
+		<script type="text/javascript" src="torf_quiz.js"></script>
 
 
     </head>
@@ -136,7 +135,7 @@
         
          <!-- Quiz Box -->
         <div class="container">
-            <div class="type">Multiple Choice Question</div>
+            <div class="type">True or False</div>
             <div class="qnumber"> Question : <span> 1 </span></div>
             
             <div class="questions">
@@ -146,28 +145,23 @@
             
             <div class="options_list">
                 
-                <button class="col opta" id="0" onclick="functionA(0)"> </button>   
+                <button class="col truee" id="0" onclick="recordAns(0)" >a. True / ಸರಿ</button>   
                 <br>
-                <button class="col optb" id="1" onclick="functionA(1)" ></button>
+                <button class="col false" id="1" onclick="recordAns(1)">b. False / ತಪ್ಪು</button>
                 <br>
-                <button class="col optc" id="2" onclick="functionA(2)" ></button>
-                <br>
-                <button class="col optd" id="3" onclick="functionA(3)" ></button>
 
             </div>
             <div class="buttons">
-                <button class="next"  id="nextbutton" onclick="displayRightAns()">
-                   Submit
+                <button class="next" id="nextbutton" onclick="displayRightAns()">
+                    Next
                 </button>
-                <p id="test" > Answer Will be updated here </p>
+                <p id="answer" > </p>
+                <p id="comments" > </p>
 
             </div>
-        </div>
-            
-            
-         
-        </div>
-    
+           
+
+        
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>
     </body>
