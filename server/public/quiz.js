@@ -22,7 +22,10 @@ document.addEventListener('DOMContentLoaded',() => {
 	 
 	}
 	function fetchQuestions(){
-
+	//	localStorage.removeItem("i");
+		
+			
+		
 		const xhr = new XMLHttpRequest();
 		xhr.open('GET', '/takequiz', true);
 		xhr.onload = function () {
@@ -42,24 +45,14 @@ window.onload = fetchQuestions;
 })
 
 var ans = "";
-var response={};
-var score=0;
 var choice = ""
 var item = ""
-var i=0;
+var response=JSON.parse(window.localStorage.getItem("response"));
+console.log(response)
+var score=parseInt(window.localStorage.getItem("score"));
+var i=parseInt(window.localStorage.getItem("i"));
 function makeQuestion(){   
-	if(i>=2){
-		response["round1score"]=score;
-		
-		 fetch('/round1', {
-			method: 'POST',
-			headers: {
-			  'Accept': 'application/json',
-			  'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(response)
-		  });
-		  	
+	if(i>=2){		
 	window.location="torf_quiz.html";
 	}  
 	console.log(i)
@@ -72,7 +65,8 @@ function makeQuestion(){
 	document.getElementById("2").innerHTML="3. "+arr[i].Option3+"/"+arr[i + 1].Option3;
 	document.getElementById("3").innerHTML="4. "+arr[i].Option4+"/"+arr[i + 1].Option4;
 	correctans=arr[i].Answer+"/"+arr[i+1].Answer;
-	i += 2;
+	
+	
 }
 function displayRightAns(){
 	document.getElementById("nextbutton").disabled=true;
@@ -81,14 +75,19 @@ function displayRightAns(){
 		score++;
 	}
 	response["choice"+(i/2)]=ans;
+	
 	ans="";
 	console.log(response);
 	console.log("SCORE",score);
+	i += 2;
+	window.localStorage.setItem("i",i);
+	window.localStorage.setItem("response",JSON.stringify(response));
+	window.localStorage.setItem("score",score);
 	setTimeout(()=>{
 		document.getElementById("nextbutton").disabled=false;
 		document.getElementById("test").innerHTML = "";
 		makeQuestion();
-	},5000);
+	},1000);
 	
 }
 

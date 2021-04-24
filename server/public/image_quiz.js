@@ -33,15 +33,16 @@ document.addEventListener('DOMContentLoaded',() => {
 
 });
 var arr;
-var i=0;
-var score=0;
+var k = parseInt(window.localStorage.getItem("k"));
+var response = JSON.parse(window.localStorage.getItem("response"));
+console.log(response);
+var score = parseInt(window.localStorage.getItem("score"));
 var correctans="";
 var ans="";
-var response={};
+
 function makeQuestion(){   
-	if(i>=2){
-		response["round3score"]=score;
-		
+	if(k>=2){
+		 response['score']=score;
 		 fetch('/round3', {
 			method: 'POST',
 			headers: {
@@ -54,23 +55,27 @@ function makeQuestion(){
 	window.location="lastpage.html";
 	}  
 	
-	document.getElementById("changeimg").src='../round3images/'+i+'.jpg';
-	document.getElementById("0").innerHTML=arr[i].Option1;
-	document.getElementById("1").innerHTML=arr[i].Option2;
-	document.getElementById("2").innerHTML=arr[i].Option3;
-	document.getElementById("3").innerHTML=arr[i].Option4;
-	correctans=arr[i].Answer+"/"+arr[i].KanAnswer;
-	i += 1;
+	document.getElementById("changeimg").src='../round3images/'+k+'.jpg';
+	document.getElementById("0").innerHTML=arr[k].Option1;
+	document.getElementById("1").innerHTML=arr[k].Option2;
+	document.getElementById("2").innerHTML=arr[k].Option3;
+	document.getElementById("3").innerHTML=arr[k].Option4;
+	correctans=arr[k].Answer+"/"+arr[k].KanAnswer;
+
 }
 	
 function displayRightAns(){
 	document.getElementById("nextbutton").disabled=true;
 	document.getElementById("test").innerHTML = correctans;
-	response["choice"+i]=ans;
+	response["choice"+k]=ans;
 	if(correctans==ans){
 		score++;
 	}
 	console.log(score);
+	k += 1;
+	window.localStorage.setItem("k", k);
+	window.localStorage.setItem("response", JSON.stringify(response));
+	window.localStorage.setItem("score", score);
 	setTimeout(()=>{
 		document.getElementById("nextbutton").disabled=false;
 		document.getElementById("test").innerHTML = "";

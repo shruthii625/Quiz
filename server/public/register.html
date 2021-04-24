@@ -155,11 +155,13 @@
       </form>
     </div>
 
-    <!-- Info Box -->
-   
-   
-
-    <script src="script_instructions.js"></script>
-
+<script>
+  	window.localStorage.setItem("i",0);
+    window.localStorage.setItem("j",0);
+    window.localStorage.setItem("k",0);
+		window.localStorage.setItem("response",'{"round":"1"}');
+		window.localStorage.setItem("score",0);
+    console.log(JSON.parse(window.localStorage.getItem("response")));
+</script>
   </body>
 </html>

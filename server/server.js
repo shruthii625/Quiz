@@ -165,9 +165,6 @@ app.get("/takequiz", (req, res) => {
     });
 });
 
-app.post("/round1", (req, res) => {
-  studentdetails.push(JSON.parse(JSON.stringify(req.body)));
-});
 
 app.get("/takeround2", (req, res) => {
   mongo_oper
@@ -193,18 +190,13 @@ app.get("/takeround3", (req, res) => {
       res.send(err);
     });
 });
-app.post("/round2", (req, res) => {
-  studentdetails.push(JSON.parse(JSON.stringify(req.body)));
-  console.log(studentdetails);
-});
+
 app.post("/round3", (req, res) => {
   studentdetails.push(JSON.parse(JSON.stringify(req.body)));
 });
 
 app.get("/endtest", (req, res) => {
-  var totalscore=studentdetails[1]['round1score']+studentdetails[2]['round2score']+studentdetails[3]['round3score'];
-  studentdetails.push({'totalscore':totalscore});
-  console.log(studentdetails[0]["pnumber"]);
+  
   var path = "./responses/" + studentdetails[0]["pnumber"] + ".txt";
   var file = fs.createWriteStream(path);
   file.on("error", function (err) {
@@ -230,11 +222,10 @@ app.get("/mailresponse", (req, res) => {
 
   let filesLeft = true;
   while (filesLeft) {
-    // Read a file as fs.Dirent object
+    
     let fileDirent = openedDir.readSync();
 
-    // If readSync() does not return null
-    // print its filename
+    
     if (fileDirent != null) {
       console.log("Name:", fileDirent.name);
 
@@ -245,10 +236,16 @@ app.get("/mailresponse", (req, res) => {
         console.error(err);
       }
     }
-    // If the readSync() returns null
-    // stop the loop
+    
     else filesLeft = false;
   }
 });
+
+
+app.get('/logout',(req,res)=>{
+  res.clearCookie("name");
+  loggedin="false";
+  res.redirect('/');
+})
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log("Server started"));
