@@ -93,7 +93,7 @@
 
           <a href="upload.html" class="btn btn-primary btn-lg button"> Upload new set <a> 
             <br>
-            <a id="mailbtn" class="btn btn-primary btn-lg button"> Mail Student Responses </a>
+            <a id="downloadbtn" class="btn btn-primary btn-lg button"> Download Student Responses </a>
 
          </div>
         
@@ -106,14 +106,19 @@
     
     window.addEventListener('load', (event) => {
       if(document.cookie=="name=admin")
-       alert(document.cookie);
-      else
+       {}
+      else{
       window.location="/";
+      }
   });
   
-  document.getElementById("mailbtn").addEventListener('click',()=>{
+  document.getElementById("downloadbtn").addEventListener('click',()=>{
     var xhr = new XMLHttpRequest;
-    xhr.open('GET','/mailresponse',true);
+    xhr.open('GET','/admins/mailresponse',true);
+    xhr.onload=function(){
+      
+   window.location=xhr.responseURL;
+    }
     xhr.send();
   })
    

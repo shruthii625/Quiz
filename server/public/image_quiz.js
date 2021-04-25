@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded',() => {
 			timeleftdisplay.innerHTML=minutes+":"+seconds;
 			console.log(timer)
 			timer=timer-1;
+			window.localStorage.setItem("timer",timer);
 		}, 1000);
 	 
 	 
@@ -24,6 +25,14 @@ document.addEventListener('DOMContentLoaded',() => {
 		xhr.onload = function () {
 			//console.log(xhr.responseText+"response text");
 			arr = JSON.parse(xhr.responseText);
+			arr.sort((a,b)=>{
+				if(a.QNO<b.QNO){
+					return -1;
+				}
+				else{
+					return 1;
+				}
+			});
 			console.log(arr);
 			countdown();
 		}
@@ -67,7 +76,7 @@ function makeQuestion(){
 function displayRightAns(){
 	document.getElementById("nextbutton").disabled=true;
 	document.getElementById("test").innerHTML = correctans;
-	response["choice"+k]=ans;
+	response["round3choice"+k]=ans;
 	if(correctans==ans){
 		score++;
 	}

@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
       timeleftdisplay.innerHTML = minutes + ":" + seconds;
       console.log(timer);
       timer = timer - 1;
+      window.localStorage.setItem("timer");
     }, 1000);
   }
 
@@ -22,6 +23,14 @@ document.addEventListener("DOMContentLoaded", () => {
     xhr.onload = function () {
       console.log(xhr.responseText + "response text");
       arr = JSON.parse(xhr.responseText);
+      arr.sort((a,b)=>{
+				if(a.QNO<b.QNO){
+					return -1;
+				}
+				else{
+					return 1;
+				}
+			})
       countdown();
     };
     xhr.send();
@@ -60,7 +69,7 @@ function displayRightAns() {
   if (cans == ans) {
     score++;
   }
-  response["choice" + j / 2] = ans;
+  response["round2choice" + j / 2] = ans;
   ans = "";
   console.log(response);
   console.log("SCORE", score);
@@ -83,6 +92,3 @@ function recordAns(option) {
   }
 }
 
-window.onunload = function () {
-  window.localStorage.setItem("timer", timer);
-};

@@ -151,9 +151,10 @@
 <script>
   window.addEventListener('load', (event) => {
     if(document.cookie=="name=admin")
-     alert(document.cookie);
-    else
+     {}
+    else{
     window.location="/";
+    }
 });
 document.getElementById("logout").addEventListener('click',()=>{
     var xhr = new XMLHttpRequest;

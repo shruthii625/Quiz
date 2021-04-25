@@ -20,7 +20,7 @@ const https = require("https");
 var request = require("request");
 const app = express();
 var loggedin = "false";
-var studentdetails = [];
+var studentdetails = {};
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads");
@@ -74,7 +74,7 @@ app.post("/login", (req, res) => {
 });
 
 app.post("/registrationdone", (req, res) => {
-  studentdetails.push(req.body);
+  studentdetails=req.body;
   res.redirect("instructions.html");
 });
 
@@ -126,6 +126,14 @@ app.post(
           .getRound3Questions(connect.getConnection)
           .then(function (r) {
             var arr = r;
+            arr.sort((a,b)=>{
+              if(a.QNO<b.QNO){
+                return -1;
+              }
+              else{
+                return 1;
+              }
+            });
             for (var i = 0; i < arr.length; i++) {
               saveImageToDisk(
                 arr[i].Images,
@@ -192,55 +200,50 @@ app.get("/takeround3", (req, res) => {
 });
 
 app.post("/round3", (req, res) => {
-  studentdetails.push(JSON.parse(JSON.stringify(req.body)));
+  studentdetails={...studentdetails, ...JSON.parse(JSON.stringify(req.body))};
+  console.log(studentdetails)
 });
 
 app.get("/endtest", (req, res) => {
-  
-  var path = "./responses/" + studentdetails[0]["pnumber"] + ".txt";
+  res.setHeader(
+    "Set-Cookie",
+    cookie.serialize("text", "taken", {
+      maxAge: 60*60,
+    })
+  );
+  var path = "./responses/" + studentdetails["pnumber"] + ".txt";
   var file = fs.createWriteStream(path);
   file.on("error", function (err) {
     /* error handling */
   });
-  studentdetails.forEach(function (v) {
-    file.write(JSON.stringify(v) + "\n");
-  });
+  
+    file.write(JSON.stringify(studentdetails) + "\n");
+ 
   file.end();
 });
 
-app.get("/mailresponse", (req, res) => {
+app.get("/admins/mailresponse", (req, res) => {
   let directory_name = "./responses";
-
-  // Open the directory
+ 
   let openedDir = fs.opendirSync(directory_name);
-
-  // Print the pathname of the directory
-  console.log("\nPath of the directory:", openedDir.path);
-
-  // Get the files present in the directory
-  console.log("Files Present in directory:");
-
   let filesLeft = true;
+  fs.open('finalresponse.txt', 'w', function (err, file) {
+    if (err) throw err;
+    console.log('Saved!');
+  });
   while (filesLeft) {
-    
     let fileDirent = openedDir.readSync();
-
-    
     if (fileDirent != null) {
-      console.log("Name:", fileDirent.name);
 
-      try {
-        const data = fs.readFileSync("./responses/"+fileDirent.name, "utf8");
-        console.log(data);
-      } catch (err) {
-        console.error(err);
-      }
+    var data= fs.readFileSync("./responses/"+fileDirent.name, "utf8");
+    fs.appendFileSync('finalresponse.txt',data+"\n");
     }
     
     else filesLeft = false;
   }
+ 
+ res.download("finalresponse.txt")
 });
-
 
 app.get('/logout',(req,res)=>{
   res.clearCookie("name");

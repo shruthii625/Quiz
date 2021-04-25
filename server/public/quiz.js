@@ -1,4 +1,4 @@
-var timer = 3220;
+var timer = window.localStorage.getItem("timer");
 document.addEventListener('DOMContentLoaded',() => {
 	const timeleftdisplay = document.querySelector('#timer')
 	/* const startbtn = document.querySelector('#startbutton') */
@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded',() => {
 			timeleftdisplay.innerHTML=minutes+":"+seconds;
 			//display.textContent = minutes + ":" + seconds;
 			timer=timer-1;
+			window.localStorage.setItem("timer");
 			// if (--timer < 0) {
 			// 	timer = duration;
 			// }
@@ -31,6 +32,14 @@ document.addEventListener('DOMContentLoaded',() => {
 		xhr.onload = function () {
 			console.log(xhr.responseText+"response text");
 			arr = JSON.parse(xhr.responseText);
+			arr.sort((a,b)=>{
+				if(a.QNO<b.QNO){
+					return -1;
+				}
+				else{
+					return 1;
+				}
+			})
 			countdown();
 		}
 		xhr.send();
@@ -70,11 +79,11 @@ function makeQuestion(){
 }
 function displayRightAns(){
 	document.getElementById("nextbutton").disabled=true;
-	document.getElementById("test").innerHTML = correctans;
+	document.getElementById("test").innerHTML ="CORRECT ANSWER: " +correctans;
 	if(correctans==ans.slice(3)){
 		score++;
 	}
-	response["choice"+(i/2)]=ans;
+	response["round1choice"+(i/2)]=ans;
 	
 	ans="";
 	console.log(response);
@@ -85,7 +94,7 @@ function displayRightAns(){
 	window.localStorage.setItem("score",score);
 	setTimeout(()=>{
 		document.getElementById("nextbutton").disabled=false;
-		document.getElementById("test").innerHTML = "";
+		document.getElementById("test").innerHTML = " ";
 		makeQuestion();
 	},1000);
 	
@@ -110,10 +119,6 @@ function functionA(btn){
 	
 }
 
-window.onunload = function(){
-    
-	window.localStorage.setItem("timer",timer);
-}
 // function preventBack() { window.history.forward(); }  
 // setTimeout("preventBack()", 0);  
 // window.onunload = function () { null };  
