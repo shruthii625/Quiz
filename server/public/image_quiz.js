@@ -2,16 +2,15 @@
 document.addEventListener('DOMContentLoaded',() => {
 	const timeleftdisplay = document.querySelector('#timer')
 	var timer=parseInt(window.localStorage.getItem("timer"));
+	
 	function countdown(){
 		makeQuestion();
 		setInterval(function(){
 			minutes = parseInt(timer / 60, 10);
 			seconds = parseInt(timer % 60, 10);
-	
 			minutes = minutes < 10 ? "0" + minutes : minutes;
 			seconds = seconds < 10 ? "0" + seconds : seconds;
 			timeleftdisplay.innerHTML=minutes+":"+seconds;
-			console.log(timer)
 			timer=timer-1;
 			window.localStorage.setItem("timer",timer);
 		}, 1000);
@@ -23,7 +22,6 @@ document.addEventListener('DOMContentLoaded',() => {
 		const xhr = new XMLHttpRequest();
 		xhr.open('GET', '/takeround3', true);
 		xhr.onload = function () {
-			//console.log(xhr.responseText+"response text");
 			arr = JSON.parse(xhr.responseText);
 			arr.sort((a,b)=>{
 				if(a.QNO<b.QNO){
@@ -33,7 +31,6 @@ document.addEventListener('DOMContentLoaded',() => {
 					return 1;
 				}
 			});
-			console.log(arr);
 			countdown();
 		}
 		xhr.send();
@@ -44,13 +41,12 @@ document.addEventListener('DOMContentLoaded',() => {
 var arr;
 var k = parseInt(window.localStorage.getItem("k"));
 var response = JSON.parse(window.localStorage.getItem("response"));
-console.log(response);
 var score = parseInt(window.localStorage.getItem("score"));
 var correctans="";
 var ans="";
 
 function makeQuestion(){   
-	if(k>=2){
+	if(k>=arr.length){
 		 response['score']=score;
 		 fetch('/round3', {
 			method: 'POST',
@@ -75,12 +71,11 @@ function makeQuestion(){
 	
 function displayRightAns(){
 	document.getElementById("nextbutton").disabled=true;
-	document.getElementById("test").innerHTML = correctans;
+	document.getElementById("test").innerHTML = "CORRECT ANSWER: "+correctans;
 	response["round3choice"+k]=ans;
 	if(correctans==ans){
 		score++;
 	}
-	console.log(score);
 	k += 1;
 	window.localStorage.setItem("k", k);
 	window.localStorage.setItem("response", JSON.stringify(response));
@@ -107,3 +102,7 @@ function storeChoice(btn){
 		ans = document.getElementById("3").innerHTML;
 	}
 }
+
+function preventBack() { window.history.forward(); }  
+setTimeout("preventBack()", 0);  
+window.onunload = function () { null };  

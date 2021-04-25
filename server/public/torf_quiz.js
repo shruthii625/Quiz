@@ -1,5 +1,6 @@
 var timer;
 document.addEventListener("DOMContentLoaded", () => {
+  
   const timeleftdisplay = document.querySelector("#timer");
   timer = parseInt(window.localStorage.getItem("timer"));
   function countdown() {
@@ -7,13 +8,11 @@ document.addEventListener("DOMContentLoaded", () => {
     setInterval(function () {
       minutes = parseInt(timer / 60, 10);
       seconds = parseInt(timer % 60, 10);
-
       minutes = minutes < 10 ? "0" + minutes : minutes;
       seconds = seconds < 10 ? "0" + seconds : seconds;
       timeleftdisplay.innerHTML = minutes + ":" + seconds;
-      console.log(timer);
       timer = timer - 1;
-      window.localStorage.setItem("timer");
+      window.localStorage.setItem("timer",timer);
     }, 1000);
   }
 
@@ -21,7 +20,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const xhr = new XMLHttpRequest();
     xhr.open("GET", "/takeround2", true);
     xhr.onload = function () {
-      console.log(xhr.responseText + "response text");
       arr = JSON.parse(xhr.responseText);
       arr.sort((a,b)=>{
 				if(a.QNO<b.QNO){
@@ -43,16 +41,11 @@ var ans = "";
 var correctans = "";
 var comments = "";
 var response = JSON.parse(window.localStorage.getItem("response"));
-console.log(response);
 var score = parseInt(window.localStorage.getItem("score"));
 function makeQuestion() {
   if (j >= 2) {
     window.location = "image_quiz.html";
   }
-  console.log(j);
-  console.log(arr.length);
-  console.log(arr[j].Question);
-  console.log(arr[j+1].Question);
   document.getElementById("question").innerHTML = arr[j].Question;
   document.getElementById("question_kan").innerHTML = arr[j + 1].Question;
   cans = arr[j].TrueorFalse + "";
@@ -62,17 +55,13 @@ function makeQuestion() {
 
 function displayRightAns() {
   document.getElementById("nextbutton").disabled = true;
-  document.getElementById("answer").innerHTML = correctans;
+  document.getElementById("answer").innerHTML ="CORRECT ANSWER: " + correctans;
   document.getElementById("comments").innerHTML = comments;
-  console.log(cans);
-  console.log(ans);
   if (cans == ans) {
     score++;
   }
   response["round2choice" + j / 2] = ans;
   ans = "";
-  console.log(response);
-  console.log("SCORE", score);
   j += 2;
   window.localStorage.setItem("j", j);
   window.localStorage.setItem("response", JSON.stringify(response));
@@ -91,4 +80,8 @@ function recordAns(option) {
     ans = "false";
   }
 }
+
+function preventBack() { window.history.forward(); }  
+setTimeout("preventBack()", 0);  
+window.onunload = function () { null };  
 

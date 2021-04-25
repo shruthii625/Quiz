@@ -1,36 +1,25 @@
-var timer = window.localStorage.getItem("timer");
 document.addEventListener('DOMContentLoaded',() => {
 	const timeleftdisplay = document.querySelector('#timer')
-	/* const startbtn = document.querySelector('#startbutton') */
+	timer = window.localStorage.getItem("timer");
 	
 	function countdown(){
 		makeQuestion();
 		setInterval(function(){
 			console.log(timer);
 			minutes = parseInt(timer / 60, 10);
-			seconds = parseInt(timer % 60, 10);
-	
+			seconds = parseInt(timer % 60, 10);	
 			minutes = minutes < 10 ? "0" + minutes : minutes;
 			seconds = seconds < 10 ? "0" + seconds : seconds;
 			timeleftdisplay.innerHTML=minutes+":"+seconds;
-			//display.textContent = minutes + ":" + seconds;
 			timer=timer-1;
-			window.localStorage.setItem("timer");
-			// if (--timer < 0) {
-			// 	timer = duration;
-			// }
+			window.localStorage.setItem("timer",timer);
 		}, 1000);
 	 
 	}
-	function fetchQuestions(){
-	//	localStorage.removeItem("i");
-		
-			
-		
+	function fetchQuestions(){		
 		const xhr = new XMLHttpRequest();
 		xhr.open('GET', '/takequiz', true);
 		xhr.onload = function () {
-			console.log(xhr.responseText+"response text");
 			arr = JSON.parse(xhr.responseText);
 			arr.sort((a,b)=>{
 				if(a.QNO<b.QNO){
@@ -50,23 +39,19 @@ document.addEventListener('DOMContentLoaded',() => {
 	
 window.onload = fetchQuestions;
 
-    /* startbtn.addEventListener('click', countdown) */ //in case timer starting needs to be controlled 
 })
 
 var ans = "";
 var choice = ""
 var item = ""
 var response=JSON.parse(window.localStorage.getItem("response"));
-console.log(response)
 var score=parseInt(window.localStorage.getItem("score"));
 var i=parseInt(window.localStorage.getItem("i"));
 function makeQuestion(){   
 	if(i>=2){		
 	window.location="torf_quiz.html";
 	}  
-	console.log(i)
-	console.log(arr.length)
-	console.log(arr[i].Question)
+
 	document.getElementById("question").innerHTML=arr[i].Question;
 	document.getElementById("question_kan").innerHTML=arr[i + 1].Question;
 	document.getElementById("0").innerHTML="1. "+arr[i].Option1+"/"+arr[i + 1].Option1;
@@ -86,8 +71,6 @@ function displayRightAns(){
 	response["round1choice"+(i/2)]=ans;
 	
 	ans="";
-	console.log(response);
-	console.log("SCORE",score);
 	i += 2;
 	window.localStorage.setItem("i",i);
 	window.localStorage.setItem("response",JSON.stringify(response));
@@ -119,6 +102,7 @@ function functionA(btn){
 	
 }
 
-// function preventBack() { window.history.forward(); }  
-// setTimeout("preventBack()", 0);  
-// window.onunload = function () { null };  
+function preventBack() { window.history.forward(); }  
+setTimeout("preventBack()", 0);  
+window.onunload = function () { null };  
+

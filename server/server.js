@@ -57,8 +57,8 @@ app.get("/admins/adminhome", isLoggedIn, (req, res) => {
 
 app.post("/login", (req, res) => {
   if (
-    req.body.username == "shruthii1410@gmail.com" &&
-    req.body.password == "password"
+    req.body.username == process.env.USER_NAME &&
+    req.body.password == process.env.PASSWORD
   ) {
     loggedin = "true";
     res.setHeader(
@@ -86,18 +86,13 @@ app.post(
     var r1 = 0,
       r2 = 0,
       r3 = 0;
-    console.log("in upload");
-    console.log(req.file.filename);
     converted_data1 = Round1conversion(req.file.filename);
     converted_data2 = Round2conversion(req.file.filename);
     converted_data3 = Round3conversion(req.file.filename);
-    console.log(converted_data3);
-    // let ress;
     Round1.create(converted_data1).then(function () {
       mongo_oper
         .first(connect.getConnection, converted_data1)
         .then(function () {
-          console.log("r1");
           r1 = 1;
         });
     });
@@ -105,7 +100,6 @@ app.post(
       mongo_oper
         .Round2insert(connect.getConnection, converted_data2)
         .then(function () {
-          console.log("r2");
           r2 = 1;
         });
     });
@@ -113,13 +107,11 @@ app.post(
       mongo_oper
         .Round3insert(connect.getConnection, converted_data3)
         .then(function () {
-          console.log("r3");
           r3 = 1;
         });
     });
 
     var stop = setInterval(() => {
-      console.log("r1==" + r1 + "r2==" + r2 + "r3==" + r3);
       if (r1 == 1 && r2 == 1 && r3 == 1) {
         clearInterval(stop);
         mongo_oper
@@ -143,16 +135,13 @@ app.post(
             }
             function saveImageToDisk(url, path, i) {
               var fullUrl = url;
-              console.log(fullUrl);
               var localPath = fs.createWriteStream(path);
-              var r = https.get(fullUrl, function (response) {
-                console.log(i);
+               https.get(fullUrl, function (response) {
                 response.pipe(localPath);
               });
             }
           })
           .catch(function (err) {
-            console.log("erroeserves" + err);
           });
         res.redirect("admin.html");
       }
@@ -164,11 +153,9 @@ app.get("/takequiz", (req, res) => {
   mongo_oper
     .second(connect.getConnection)
     .then(function (r) {
-      console.log("resolved");
       res.json(r);
     })
     .catch(function (err) {
-      console.log("erroeserves" + err);
       res.send(err);
     });
 });
@@ -178,11 +165,9 @@ app.get("/takeround2", (req, res) => {
   mongo_oper
     .getRound2Questions(connect.getConnection)
     .then(function (r) {
-      console.log("resolved");
       res.json(r);
     })
     .catch(function (err) {
-      console.log("erroeserves" + err);
       res.send(err);
     });
 });
@@ -190,36 +175,34 @@ app.get("/takeround3", (req, res) => {
   mongo_oper
     .getRound3Questions(connect.getConnection)
     .then(function (r) {
-      console.log("resolved");
+     
       res.json(r);
     })
     .catch(function (err) {
-      console.log("erroeserves" + err);
       res.send(err);
     });
 });
 
 app.post("/round3", (req, res) => {
   studentdetails={...studentdetails, ...JSON.parse(JSON.stringify(req.body))};
-  console.log(studentdetails)
 });
 
 app.get("/endtest", (req, res) => {
-  res.setHeader(
-    "Set-Cookie",
-    cookie.serialize("text", "taken", {
-      maxAge: 60*60,
-    })
-  );
-  var path = "./responses/" + studentdetails["pnumber"] + ".txt";
-  var file = fs.createWriteStream(path);
-  file.on("error", function (err) {
-    /* error handling */
-  });
   
-    file.write(JSON.stringify(studentdetails) + "\n");
- 
+const folderName = './responses'
+
+try {
+  if (!fs.existsSync(folderName)) {
+    fs.mkdirSync(folderName)
+  }
+} catch (err) {
+  console.error(err)
+}
+  var path = "./responses/" + studentdetails["pnumber"]+ Date.now() + ".txt";
+  var file = fs.createWriteStream(path);
+  file.write(JSON.stringify(studentdetails) + "\n");
   file.end();
+ 
 });
 
 app.get("/admins/mailresponse", (req, res) => {
@@ -229,7 +212,7 @@ app.get("/admins/mailresponse", (req, res) => {
   let filesLeft = true;
   fs.open('finalresponse.txt', 'w', function (err, file) {
     if (err) throw err;
-    console.log('Saved!');
+  
   });
   while (filesLeft) {
     let fileDirent = openedDir.readSync();
@@ -244,7 +227,15 @@ app.get("/admins/mailresponse", (req, res) => {
  
  res.download("finalresponse.txt")
 });
+app.get('/admins/del',()=>{
+  const fs = require('fs').promises;
 
+const directory = './responses';
+
+fs.rmdir(directory, { recursive: true });
+
+
+});  
 app.get('/logout',(req,res)=>{
   res.clearCookie("name");
   loggedin="false";
