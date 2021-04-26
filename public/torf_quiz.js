@@ -43,7 +43,7 @@ var comments = "";
 var response = JSON.parse(window.localStorage.getItem("response"));
 var score = parseInt(window.localStorage.getItem("score"));
 function makeQuestion() {
-  if (j >= arr.length) {
+  if (j >= 4) {
     window.location = "image_quiz.html";
   }
   document.getElementById("question").innerHTML = arr[j].Question;

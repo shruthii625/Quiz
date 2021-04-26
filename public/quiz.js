@@ -48,7 +48,7 @@ var response=JSON.parse(window.localStorage.getItem("response"));
 var score=parseInt(window.localStorage.getItem("score"));
 var i=parseInt(window.localStorage.getItem("i"));
 function makeQuestion(){   
-	if(i>=arr.length){		
+	if(i>=4){		
 	window.location="torf_quiz.html";
 	}  
 

@@ -46,7 +46,7 @@ var correctans="";
 var ans="";
 
 function makeQuestion(){   
-	if(k>=arr.length){
+	if(k>=2){
 		 response['score']=score;
 		 fetch('/round3', {
 			method: 'POST',
