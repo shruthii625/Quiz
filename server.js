@@ -185,6 +185,7 @@ app.get("/takeround3", (req, res) => {
 
 app.post("/round3", (req, res) => {
   studentdetails={...studentdetails, ...JSON.parse(JSON.stringify(req.body))};
+  res.sendStatus(200);
 });
 
 app.get("/endtest", (req, res) => {
@@ -202,7 +203,8 @@ try {
   var file = fs.createWriteStream(path);
   file.write(JSON.stringify(studentdetails) + "\n");
   file.end();
- 
+  res.sendStatus(200);
+
 });
 
 app.get("/admins/mailresponse", (req, res) => {
@@ -233,6 +235,7 @@ app.get('/admins/del',()=>{
 const directory = './responses';
 
 fs.rmdir(directory, { recursive: true });
+res.sendStatus(200);
 
 
 });  
