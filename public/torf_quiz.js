@@ -68,8 +68,10 @@ function displayRightAns() {
   window.localStorage.setItem("score", score);
   setTimeout(() => {
     document.getElementById("nextbutton").disabled = false;
+    document.getElementById("answer").innerHTML="";
+    document.getElementById("comments").innerHTML="";
     makeQuestion();
-  }, 3000);
+  }, 2000);
 }
 
 function recordAns(option) {

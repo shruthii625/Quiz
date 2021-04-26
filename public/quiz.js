@@ -79,7 +79,7 @@ function displayRightAns(){
 		document.getElementById("nextbutton").disabled=false;
 		document.getElementById("test").innerHTML = " ";
 		makeQuestion();
-	},1000);
+	},2000);
 	
 }
 
