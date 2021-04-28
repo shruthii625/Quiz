@@ -219,7 +219,7 @@ app.get("/admins/mailresponse", (req, res) => {
   while (filesLeft) {
     let fileDirent = openedDir.readSync();
     if (fileDirent != null) {
-
+    console.log(fileDirent.name);
     var data= fs.readFileSync("./responses/"+fileDirent.name, "utf8");
     fs.appendFileSync('finalresponse.txt',data+"\n");
     }
