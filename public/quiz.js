@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded',() => {
 	function countdown(){
 		makeQuestion();
 		setInterval(function(){
-			console.log(timer);
 			minutes = parseInt(timer / 60, 10);
 			seconds = parseInt(timer % 60, 10);	
 			minutes = minutes < 10 ? "0" + minutes : minutes;

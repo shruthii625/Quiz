@@ -20,7 +20,7 @@ const https = require("https");
 var request = require("request");
 const app = express();
 var loggedin = "false";
-var studentdetails = {};
+//var studentdetails = {};
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads");
@@ -73,10 +73,7 @@ app.post("/login", (req, res) => {
   }
 });
 
-app.post("/registrationdone", (req, res) => {
-  studentdetails=req.body;
-  res.redirect("instructions.html");
-});
+
 
 app.post(
   "/admins/onupload",
@@ -184,13 +181,9 @@ app.get("/takeround3", (req, res) => {
 });
 
 app.post("/round3", (req, res) => {
-  studentdetails={...studentdetails, ...JSON.parse(JSON.stringify(req.body))};
-  res.sendStatus(200);
-});
-
-app.get("/endtest", (req, res) => {
-  
-const folderName = './responses'
+ 
+  studentdetails=JSON.parse(JSON.stringify(req.body));
+  const folderName = './responses'
 
 try {
   if (!fs.existsSync(folderName)) {
@@ -199,13 +192,35 @@ try {
 } catch (err) {
   console.error(err)
 }
-  var path = "./responses/" + studentdetails["pnumber"]+ Date.now() + ".txt";
+  var path = "./responses/" + studentdetails["phonenumber"]+ Date.now() + ".txt";
   var file = fs.createWriteStream(path);
   file.write(JSON.stringify(studentdetails) + "\n");
   file.end();
-  res.sendStatus(200);
+  res.sendStatus(req.body);
 
 });
+app.get('/registrationdone',(req, res)=>{
+  res.redirect("instructions.html");
+})
+
+// app.get("/endtest", (req, res) => {
+  
+// const folderName = './responses'
+
+// try {
+//   if (!fs.existsSync(folderName)) {
+//     fs.mkdirSync(folderName)
+//   }
+// } catch (err) {
+//   console.error(err)
+// }
+//   var path = "./responses/" + studentdetails["pnumber"]+ Date.now() + ".txt";
+//   var file = fs.createWriteStream(path);
+//   file.write(JSON.stringify(studentdetails) + "\n");
+//   file.end();
+//   res.sendStatus(200);
+
+// });
 
 app.get("/admins/mailresponse", (req, res) => {
   let directory_name = "./responses";
@@ -219,9 +234,8 @@ app.get("/admins/mailresponse", (req, res) => {
   while (filesLeft) {
     let fileDirent = openedDir.readSync();
     if (fileDirent != null) {
-    console.log(fileDirent.name);
     var data= fs.readFileSync("./responses/"+fileDirent.name, "utf8");
-    fs.appendFileSync('finalresponse.txt',fileDirent.name+"\n");
+    fs.appendFileSync('finalresponse.txt',data+"\n");
     }
     
     else filesLeft = false;
