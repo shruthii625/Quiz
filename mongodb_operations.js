@@ -1,8 +1,6 @@
 exports.first = async function (db, data) {
     db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-    db.collection("round1").deleteMany({});
-    console.log(data)
-    db.collection("round1").insertMany(data);
+    db.collection("round1").deleteMany({}).then(db.collection("round1").insertMany(data))
     return 1;
 }
 
@@ -26,15 +24,13 @@ exports.second = function (db) {
 }
 exports.Round2insert =async function(db,data){
     db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-    db.collection("round2").deleteMany({});
-    db.collection("round2").insertMany(data);
+    db.collection("round2").deleteMany({}).then(db.collection("round2").insertMany(data));
     return 1;
 }
 
 exports.Round3insert = async function(db,data){
     db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-    db.collection("round3").deleteMany({});
-    db.collection("round3").insertMany(data);
+    db.collection("round3").deleteMany({}).then(db.collection("round3").insertMany(data));
     return 1;
 }
     
