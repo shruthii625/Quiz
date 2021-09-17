@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        body{
+    background: #90ffcf;
+}
+
+.start_btn,
+.info_box{
+    position: absolute;
+    top: 50%;
+    left: 50%;  
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 
+                0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.info_box{
+    width: 540px;
+    background: #fff;
+    border-radius: 5px;
+    transform: translate(-50%, -50%) scale(0.9);
+    transition: all 0.3s ease;
+}
+
+.info_box .info-title{
+    height: 60px;
+    width: 100%;
+    border-bottom: 1px solid lightgrey;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    border-radius: 5px 5px 0 0;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.info_box .info-list{
+    padding: 15px 30px;
+}
+
+.info_box .info-list .info{
+    margin: 5px 0;
+    font-size: 17px;
+}
+
+.info_box .info-list .info span{
+    font-weight: 600;
+    color: black;
+}
+.info_box .buttons{
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 30px;
+    border-top: 1px solid lightgrey;
+}
+
+.info_box .buttons button{
+    margin: 0 5px;
+    height: 40px;
+    width: 100px;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    border: 1px solid #90ffcf;
+    transition: all 0.3s ease;
+}
+@media (min-width:300px) and (max-width:800px){
+    .info_box{
+        width: 320px;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="info_box">
+        <div class="info-title"><span>Instructions</span></div>
+        <div class="info-list">
+            <div class="info">1. You will have a total of <span>60 minutes</span> to complete the quiz.</div>
+            <div class="info">2. Once you select your answer and press submit, you cannot change it.</div>
+            <div class="info">3. You will be disqualified if you open other tabs while taking the quiz.</div>
+            <div class="info">4. You'll get one point for every correct answer. If your answer is wrong, you'll get zero points. There is no negative marking.</div>
+            <div class="info">5. Do not take the quiz more than once. You will be disqualified otherwise.</div>
+            
+        </div>
+        <div class="buttons">
+            
+            <button class="start" id="start">Start</button>
+        </div>
+    </div>
+</body>
+<script>
+    console.log(window.localStorage.getItem("response"));
+    document.getElementById("start").addEventListener('click',()=>{
+        window.location.href="quiz.html";
+    });
+    
+function preventBack() { window.history.forward(); }  
+setTimeout("preventBack()", 0);  
+window.onunload = function () { null };  
+
+</script>
+
+</html>
