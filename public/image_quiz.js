@@ -70,36 +70,42 @@ function makeQuestion(){
 }
 	
 function displayRightAns(){
-	document.getElementById("nextbutton").disabled=true;
-	document.getElementById("test").innerHTML = "CORRECT ANSWER: "+correctans;
-	response["round3choice"+k]=ans;
-	if(correctans==ans){
-		score++;
+	if (flag>=0){
+		document.getElementById("nextbutton").disabled=true;
+		document.getElementById("test").innerHTML = "CORRECT ANSWER: "+correctans;
+		response["round3choice"+k]=ans;
+		if(correctans==ans){
+			score++;
+		}
+		k += 1;
+		window.localStorage.setItem("k", k);
+		window.localStorage.setItem("response", JSON.stringify(response));
+		window.localStorage.setItem("score", score);
+		setTimeout(()=>{
+			document.getElementById("nextbutton").disabled=false;
+			document.getElementById("test").innerHTML = "";
+			makeQuestion();
+			location.reload();
+		},2000);
 	}
-	k += 1;
-	window.localStorage.setItem("k", k);
-	window.localStorage.setItem("response", JSON.stringify(response));
-	window.localStorage.setItem("score", score);
-	setTimeout(()=>{
-		document.getElementById("nextbutton").disabled=false;
-		document.getElementById("test").innerHTML = "";
-		makeQuestion();
-	},2000);
+	else{
+		document.getElementById("test").innerHTML ="Choose an option";
+	}	
 }
 
-function storeChoice(btn){
+var flag= -1
+function functionA(btn){
 	if(btn==0){
-		ans = document.getElementById("0").innerHTML;
-		
+		flag = 0 	
 	}
 	if(btn==1){
-		ans = document.getElementById("1").innerHTML;
+		flag = 1
 	}
 	if(btn==2){
-		ans = document.getElementById("2").innerHTML;
+		flag = 2
 	}
 	if(btn==3){
-		ans = document.getElementById("3").innerHTML;
+		flag = 3
 	}
 }
 

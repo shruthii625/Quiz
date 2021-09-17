@@ -40,13 +40,15 @@ window.onload = fetchQuestions;
 
 })
 
+
 var ans = "";
 var choice = ""
 var item = ""
 var response=JSON.parse(window.localStorage.getItem("response"));
 var score=parseInt(window.localStorage.getItem("score"));
 var i=parseInt(window.localStorage.getItem("i"));
-function makeQuestion(){   
+function makeQuestion(){ 
+
 	if(i>=arr.length){		
 	window.location="torf_quiz.html";
 	}  
@@ -62,43 +64,45 @@ function makeQuestion(){
 	
 }
 function displayRightAns(){
-	document.getElementById("nextbutton").disabled=true;
-	document.getElementById("test").innerHTML ="CORRECT ANSWER: " +correctans;
-	if(correctans==ans.slice(3)){
-		score++;
+	if(flag>=0){
+		document.getElementById("nextbutton").disabled=true;
+		document.getElementById("test").innerHTML ="CORRECT ANSWER: " +correctans;
+		if(correctans==ans.slice(3)){
+			score++;
+		}
+		response["round1choice"+(i/2)]=ans;
+		
+		ans="";
+		i += 2;
+		window.localStorage.setItem("i",i);
+		window.localStorage.setItem("response",JSON.stringify(response));
+		window.localStorage.setItem("score",score);
+		setTimeout(()=>{
+			document.getElementById("nextbutton").disabled=false;
+			document.getElementById("test").innerHTML = " ";
+			makeQuestion();
+			location.reload();
+		},2000);
 	}
-	response["round1choice"+(i/2)]=ans;
-	
-	ans="";
-	i += 2;
-	window.localStorage.setItem("i",i);
-	window.localStorage.setItem("response",JSON.stringify(response));
-	window.localStorage.setItem("score",score);
-	setTimeout(()=>{
-		document.getElementById("nextbutton").disabled=false;
-		document.getElementById("test").innerHTML = " ";
-		makeQuestion();
-	},2000);
-	
+	else{
+		document.getElementById("test").innerHTML ="Choose an option";
+	}
 }
 
+var flag= -1
 function functionA(btn){
-
-
 	if(btn==0){
-		ans = document.getElementById("0").innerHTML;
-		
+		flag = 0 	
 	}
 	if(btn==1){
-		ans = document.getElementById("1").innerHTML;
+		flag = 1
 	}
 	if(btn==2){
-		ans = document.getElementById("2").innerHTML;
+		flag = 2
 	}
 	if(btn==3){
-		ans = document.getElementById("3").innerHTML;
+		flag = 3
 	}
-	
 }
 
 function preventBack() { window.history.forward(); }  
