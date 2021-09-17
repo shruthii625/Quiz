@@ -1,7 +1,17 @@
 exports.first = async function (db, data) {
     db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-    db.collection("round1").deleteMany({}).then(db.collection("round1").insertMany(data))
+    db.collection("round1").deleteMany({}, (error, res) => {
+        if(error) throw error 
+
+        else{
+        db.collection("round1").insertMany(data, (error, res) => {
+        if (error) throw error;
+        console.log('Docs inserted!');
+    });
+}
+});
     return 1;
+    
 }
 
 exports.second = function (db) {
@@ -24,13 +34,31 @@ exports.second = function (db) {
 }
 exports.Round2insert =async function(db,data){
     db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-    db.collection("round2").deleteMany({}).then(db.collection("round2").insertMany(data));
-    return 1;
+    db.collection("round2").deleteMany({}, (error, res) => {
+        if(error) throw error 
+
+        else{
+        db.collection("round2").insertMany(data, (error, res) => {
+        if (error) throw error;
+        console.log('Docs inserted!');
+    });
 }
+});
+    return 1;
+    }
 
 exports.Round3insert = async function(db,data){
     db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-    db.collection("round3").deleteMany({}).then(db.collection("round3").insertMany(data));
+    db.collection("round3").deleteMany({}, (error, res) => {
+        if(error) throw error 
+
+        else{
+        db.collection("round3").insertMany(data, (error, res) => {
+        if (error) throw error;
+        console.log('Docs inserted!');
+    });
+}
+});
     return 1;
 }
     
