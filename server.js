@@ -232,11 +232,26 @@ app.get("/admins/mailresponse", (req, res) => {
     if (err) throw err;
   
   });
+  var fl=0;
   while (filesLeft) {
     let fileDirent = openedDir.readSync();
     if (fileDirent != null) {
     var data= fs.readFileSync("./responses/"+fileDirent.name, "utf8");
-    fs.appendFileSync('finalresponse.csv',data.substring(1, data.length-1)+"\n");
+    
+    data = data.substring(1, data.length-2)
+    data = data.split(",")
+    var findata = "";
+    var findataf="";
+    data.forEach(element => {
+      var temp = element.split(":");
+      findata= findata + temp[1] + ",";
+      findataf = findataf + temp[0] +","
+    });
+    if(fl==0){
+      fs.appendFileSync('finalresponse.csv',findataf+"\n\n");
+      fl++;
+    }
+    fs.appendFileSync('finalresponse.csv',findata+"\n");
     }
     
     else filesLeft = false;
