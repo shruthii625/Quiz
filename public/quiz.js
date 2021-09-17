@@ -103,6 +103,7 @@ function functionA(btn){
 	if(btn==3){
 		flag = 3
 	}
+	ans = document.getElementById(flag).innerHTML
 }
 
 function preventBack() { window.history.forward(); }  
