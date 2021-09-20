@@ -76,7 +76,7 @@ function displayRightAns() {
     }, 2000);
   }
   else{
-    document.getElementById("test").innerHTML ="Choose an option";
+    document.getElementById("answer").innerHTML ="Choose an option";
   }
  
 }
