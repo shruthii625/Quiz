@@ -46,9 +46,14 @@ var ans="";
 
 function makeQuestion(){   
 	if(k>=arr.length){
+		 
 		 response['score']=score;
-		 response['starttime'] = window.localStorage.getItem("starttime");
-		 response['finishtime'] = window.localStorage.getItem("timer");
+		 start_time = window.localStorage.getItem("starttime");
+		 finish_time = window.localStorage.getItem("timer");
+		 time_taken = start_time - finish_time;
+		 minutes = time_taken / 60;
+		 seconds = time_taken % 60 ;
+		 responses['timetaken'] = minutes+":"+seconds
 		 fetch('/round3', {
 			method: 'POST',
 			headers: {
