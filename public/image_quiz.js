@@ -53,7 +53,7 @@ function makeQuestion(){
 		 time_taken = start_time - finish_time;
 		 minutes = time_taken / 60;
 		 seconds = time_taken % 60 ;
-		 responses['timetaken'] = minutes+":"+seconds
+		 responses['timetaken'] = minutes+":"+seconds ;
 		 fetch('/round3', {
 			method: 'POST',
 			headers: {
