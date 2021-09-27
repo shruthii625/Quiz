@@ -2,7 +2,6 @@
 document.addEventListener('DOMContentLoaded',() => {
 	const timeleftdisplay = document.querySelector('#timer')
 	var timer=parseInt(window.localStorage.getItem("timer"));
-	
 	function countdown(){
 		makeQuestion();
 		setInterval(function(){
@@ -48,6 +47,8 @@ var ans="";
 function makeQuestion(){   
 	if(k>=arr.length){
 		 response['score']=score;
+		 response['starttime'] = window.localStorage.getItem("starttime");
+		 response['finishtime'] = window.localStorage.getItem("timer");
 		 fetch('/round3', {
 			method: 'POST',
 			headers: {
@@ -60,7 +61,7 @@ function makeQuestion(){
 	window.location="lastpage.html";
 	}  
 	
-	document.getElementById("changeimg").src='../round3images/'+k+'.jpg';
+	document.getElementById("changeimg").src=arr[k].Images;
 	document.getElementById("0").innerHTML=arr[k].Option1;
 	document.getElementById("1").innerHTML=arr[k].Option2;
 	document.getElementById("2").innerHTML=arr[k].Option3;
@@ -73,10 +74,12 @@ function displayRightAns(){
 	if (flag>=0){
 		document.getElementById("nextbutton").disabled=true;
 		document.getElementById("test").innerHTML = "CORRECT ANSWER: "+correctans;
-		response["round3choice"+k]=ans;
+		var sc=0;
 		if(correctans==ans){
 			score++;
+			sc++;
 		}
+		response["round3question"+k+"score"]=ans;
 		k += 1;
 		window.localStorage.setItem("k", k);
 		window.localStorage.setItem("response", JSON.stringify(response));

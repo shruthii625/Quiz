@@ -14,6 +14,7 @@ const connect = require("./models/db");
 const Round1 = require("./models/Round1model");
 const Round2 = require("./models/Round2model");
 const Round3 = require("./models/Round3model");
+const StudentResponse = require("./models/StudentResponseModel");
 const cookie = require("cookie");
 const fs = require("fs");
 const https = require("https");
@@ -80,71 +81,28 @@ app.post(
   isLoggedIn,
   upload.single("quizques"),
   (req, res) => {
-    var r1 = 0,
-      r2 = 0,
-      r3 = 0;
+  
     converted_data1 = Round1conversion(req.file.filename);
     converted_data2 = Round2conversion(req.file.filename);
     converted_data3 = Round3conversion(req.file.filename);
-    Round1.create(converted_data1).then(function () {
+  p1 =  Round1.create(converted_data1).then(function () {
       mongo_oper
         .first(connect.getConnection, converted_data1)
-        .then(function () {
-          r1 = 1;
-        });
     });
-    Round2.create(converted_data2).then(function (round2) {
+  p2=  Round2.create(converted_data2).then(function (round2) {
       mongo_oper
         .Round2insert(connect.getConnection, converted_data2)
-        .then(function () {
-          r2 = 1;
-        });
     });
-    Round3.create(converted_data2).then(function (round3) {
+   p3= Round3.create(converted_data2).then(function (round3) {
       mongo_oper
         .Round3insert(connect.getConnection, converted_data3)
-        .then(function () {
-          r3 = 1;
-        });
     });
 
-    var stop = setInterval(() => {
-      if (r1 == 1 && r2 == 1 && r3 == 1) {
-        clearInterval(stop);
-        mongo_oper
-          .getRound3Questions(connect.getConnection)
-          .then(function (r) {
-            var arr = r;
-            arr.sort((a,b)=>{
-              if(a.QNO<b.QNO){
-                return -1;
-              }
-              else{
-                return 1;
-              }
-            });
-            for (var i = 0; i < arr.length; i++) {
-              saveImageToDisk(
-                arr[i].Images,
-                "./public/round3images/" + i + ".jpg",
-                i
-              );
-            }
-            function saveImageToDisk(url, path, i) {
-              var fullUrl = url;
-              var localPath = fs.createWriteStream(path);
-               https.get(fullUrl, function (response) {
-                response.pipe(localPath);
-              });
-            }
-          })
-          .catch(function (err) {
-          });
-        res.redirect("admin.html");
-      }
-    }, 1000);
-  }
-);
+  Promise.all([p1,p2,p3]).then(res.redirect("admin.html"));
+       
+      });
+   
+
 
 app.get("/takequiz", (req, res) => {	
   mongo_oper
@@ -184,89 +142,56 @@ app.get("/takeround3", (req, res) => {
 app.post("/round3", (req, res) => {
  
   studentdetails=JSON.parse(JSON.stringify(req.body));
-  const folderName = './responses'
 
-try {
-  if (!fs.existsSync(folderName)) {
-    fs.mkdirSync(folderName)
-  }
-} catch (err) {
-  console.error(err)
-}
-  var path = "./responses/" + studentdetails["phonenumber"]+ Date.now() + ".txt";
-  var file = fs.createWriteStream(path);
-  file.write(JSON.stringify(studentdetails) + "\n");
-  file.end();
-  res.sendStatus(req.body);
+  StudentResponse.create(studentdetails).then(function () {
+    mongo_oper
+      .insertStudentResponse(connect.getConnection, studentdetails)
+      
+  }).then(res.sendStatus(req.body));
 
 });
+
 app.get('/registrationdone',(req, res)=>{
   res.redirect("instructions.html");
 })
 
-// app.get("/endtest", (req, res) => {
-  
-// const folderName = './responses'
-
-// try {
-//   if (!fs.existsSync(folderName)) {
-//     fs.mkdirSync(folderName)
-//   }
-// } catch (err) {
-//   console.error(err)
-// }
-//   var path = "./responses/" + studentdetails["pnumber"]+ Date.now() + ".txt";
-//   var file = fs.createWriteStream(path);
-//   file.write(JSON.stringify(studentdetails) + "\n");
-//   file.end();
-//   res.sendStatus(200);
-
-// });
-
 app.get("/admins/mailresponse", (req, res) => {
-  let directory_name = "./responses";
- 
-  let openedDir = fs.opendirSync(directory_name);
-  let filesLeft = true;
   fs.open('finalresponse.csv', 'w', function (err, file) {
     if (err) throw err;
   
   });
-  var fl=0;
-  while (filesLeft) {
-    let fileDirent = openedDir.readSync();
-    if (fileDirent != null) {
-    var data= fs.readFileSync("./responses/"+fileDirent.name, "utf8");
-    
-    data = data.substring(1, data.length-2)
-    data = data.split(",")
-    var findata = "";
-    var findataf="";
-    data.forEach(element => {
-      var temp = element.split(":");
-      findata= findata + temp[1] + ",";
-      findataf = findataf + temp[0] +","
-    });
-    if(fl==0){
-      fs.appendFileSync('finalresponse.csv',findataf+"\n\n");
-      fl++;
-    }
-    fs.appendFileSync('finalresponse.csv',findata+"\n");
-    }
-    
-    else filesLeft = false;
-  }
+  mongo_oper
+  .getStudentResponse(connect.getConnection)
+  .then(function (r) {
+   var titles = JSON.stringify(r[0]).substring(1).split(",");
+   data = "";
+   titles.forEach(title => {
+    data+=title.split(":")[0]+",";
+   })
+   fs.appendFileSync('finalresponse.csv',data+"\n\n");
+   r.forEach(response =>{
+     response = JSON.stringify(response).split(",");
+     data = "";
+     response.forEach(ele =>{
+       data+=ele.split(":")[1]+",";
+     })
+    fs.appendFileSync('finalresponse.csv',data+"\n");
+   });
+   res.download("finalresponse.csv")
+   
+  })
+  .catch(function (err) {
+    res.send(err);
+  });
  
- res.download("finalresponse.csv")
 });
-app.get('/admins/del',()=>{
-  const fs = require('fs').promises;
-
-const directory = './responses';
-
-fs.rmdir(directory, { recursive: true });
-res.sendStatus(200);
-
+app.get('/admins/del',(req, res)=>{
+  
+mongo_oper.deleteStudentResponse(connect.getConnection).then( function(result) {
+  res.send(result)
+}).catch(function (err) {
+  res.send(err);
+});
 
 });  
 app.get('/logout',(req,res)=>{

@@ -58,10 +58,12 @@ function displayRightAns() {
     document.getElementById("nextbutton").disabled = true;
     document.getElementById("answer").innerHTML ="CORRECT ANSWER: " + correctans;
     document.getElementById("comments").innerHTML = comments;
+    var sc=0;
     if (cans == ans) {
+      sc++;
       score++;
     }
-    response["round2choice" + j / 2] = ans;
+    response["round2ques" + j / 2+"score"] = sc;
     ans = "";
     j += 2;
     window.localStorage.setItem("j", j);

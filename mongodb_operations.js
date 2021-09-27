@@ -1,16 +1,20 @@
 exports.first = async function (db, data) {
-    db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-    db.collection("round1").deleteMany({}, (error, res) => {
-        if(error) throw error 
 
+return new Promise(function (resolve, reject) {
+    db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+    db.collection("round1").deleteMany({}, (err, res) =>{
+        if(!err){
+            db.collection("round1").insertMany(data, (error, res) => {
+                if (error) throw error;
+                resolve(res)
+            });
+        }
         else{
-        db.collection("round1").insertMany(data, (error, res) => {
-        if (error) throw error;
-        console.log('Docs inserted!');
+            reject("not res");
+        }
     });
-}
+    
 });
-    return 1;
     
 }
 
@@ -33,33 +37,39 @@ exports.second = function (db) {
     });
 }
 exports.Round2insert =async function(db,data){
-    db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-    db.collection("round2").deleteMany({}, (error, res) => {
-        if(error) throw error 
-
-        else{
-        db.collection("round2").insertMany(data, (error, res) => {
-        if (error) throw error;
-        console.log('Docs inserted!');
+    return new Promise(function (resolve, reject) {
+        db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+        db.collection("round2").deleteMany({}, (err, res) =>{
+            if(!err){
+                db.collection("round2").insertMany(data, (error, res) => {
+                    if (error) throw error;
+                    resolve(res)
+                });
+            }
+            else{
+                reject("not res");
+            }
+        });
+        
     });
-}
-});
-    return 1;
     }
 
 exports.Round3insert = async function(db,data){
-    db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-    db.collection("round3").deleteMany({}, (error, res) => {
-        if(error) throw error 
-
-        else{
-        db.collection("round3").insertMany(data, (error, res) => {
-        if (error) throw error;
-        console.log('Docs inserted!');
+    return new Promise(function (resolve, reject) {
+        db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+        db.collection("round3").deleteMany({}, (err, res) =>{
+            if(!err){
+                db.collection("round3").insertMany(data, (error, res) => {
+                    if (error) throw error;
+                    resolve(res)
+                });
+            }
+            else{
+                reject("not res");
+            }
+        });
+        
     });
-}
-});
-    return 1;
 }
     
 
@@ -98,3 +108,43 @@ exports.getRound3Questions = function (db) {
         
     });
 }
+
+exports.insertStudentResponse = async function(db, data) {
+    db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+    db.collection("studentresponse").insertOne(data, (err, res) =>{
+        if (err) throw error;
+    });
+}
+
+exports.getStudentResponse =  function (db) {
+
+    return new Promise(function (resolve, reject) {
+        db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+        db.collection("studentresponse").find({}).toArray(function(err,data){
+            if(!err){
+                resolve(data);
+            }
+            else{
+                console.log("error");
+                reject("not res");
+            }
+        });
+       
+        
+    });
+}
+
+exports.deleteStudentResponse = async function(db) {  return new Promise(function (resolve, reject) {
+    db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+    db.collection("studentresponse").deleteMany({}, function(err,data){
+        if(!err){
+            resolve(data);
+        }
+        else{
+            console.log("error");
+            reject("not res");
+        }
+    });
+});
+}
+    

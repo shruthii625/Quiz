@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded',() => {
 	const timeleftdisplay = document.querySelector('#timer')
 	timer = window.localStorage.getItem("timer");
-	
+	window.localStorage.setItem("starttime", 3600);
 	function countdown(){
 		makeQuestion();
 		setInterval(function(){
@@ -67,10 +67,12 @@ function displayRightAns(){
 	if(flag>=0){
 		document.getElementById("nextbutton").disabled=true;
 		document.getElementById("test").innerHTML ="CORRECT ANSWER: " +correctans;
+		var sc=0;
 		if(correctans==ans.slice(3)){
 			score++;
+			sc++;
 		}
-		response["round1choice"+(i/2)]=ans;
+		response["round1choice"+(i/2)+"score"]=sc;
 		
 		ans="";
 		i += 2;
