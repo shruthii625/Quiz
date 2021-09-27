@@ -170,7 +170,8 @@ app.get("/admins/mailresponse", (req, res) => {
    })
    fs.appendFileSync('finalresponse.csv',data+"\n\n");
    r.forEach(response =>{
-     response = JSON.stringify(response).split(",");
+     var response = JSON.stringify(response);
+     response = response.substring(0, response.length-1).split(",");
      data = "";
      response.forEach(ele =>{
        data+=ele.split(":")[1]+",";
