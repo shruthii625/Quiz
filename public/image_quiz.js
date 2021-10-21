@@ -48,12 +48,12 @@ function makeQuestion(){
 	if(k>=arr.length){
 		 
 		 response['score']=score;
-		 start_time = window.localStorage.getItem("starttime");
-		 finish_time = window.localStorage.getItem("timer");
+		 start_time = parseInt(window.localStorage.getItem("starttime"));
+		 finish_time = parseInt(window.localStorage.getItem("timer"));
 		 time_taken = start_time - finish_time;
-		 minutes = time_taken / 60;
-		 seconds = time_taken % 60 ;
-		 response['timetaken'] = minutes+":"+seconds ;
+		 minutes = Math.floor(time_taken / 60);
+		 seconds = time_taken % 60;
+		 response['timetaken'] = minutes+"min"+seconds+"sec";
 		 fetch('/round3', {
 			method: 'POST',
 			headers: {
@@ -84,7 +84,7 @@ function displayRightAns(){
 			score++;
 			sc++;
 		}
-		response["round3question"+k+"score"]=ans;
+		response["round3question"+k+"score"]=sc;
 		k += 1;
 		window.localStorage.setItem("k", k);
 		window.localStorage.setItem("response", JSON.stringify(response));
