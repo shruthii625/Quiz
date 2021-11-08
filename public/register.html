@@ -13,15 +13,15 @@
         <div class="user-details">
           <div class="input-box">
             <span class="details"> Name / ಹೆಸರು</span>
-            <input id="fname" type="text"  name="fname" required>
+            <input id="fname" type="text" name="fname" pattern="^[A-Za-z]+$" title="Only letters allowed." required>
           </div>
           <div class="input-box">
             <span class="details">Phone Number / ಫೋನ್ ನಂಬರ್</span>
-            <input id="pnumber" type="tel" name="pnumber" pattern="^\d{10}$" maxlength="10" required>
+            <input id="pnumber" type="tel" name="pnumber" pattern="^[0-9]{10}$" maxlength="10" title="Only 10 numbers allowed." required>
           </div>
           <div class="input-box">
             <span class="details">School Name / ಶಾಲೆ</span>
-            <input id="SchoolName" type="text"   name="SchoolName" required>
+            <input id="SchoolName" type="text" name="SchoolName" pattern="^[A-Za-z]+$" title="Only letters allowed." required>
           </div>
           <div class="input-box">
             <span class="details">Class / ತರಗತಿ</span>
@@ -40,11 +40,11 @@
           </div>
           <div class="input-box">
             <span class="details">Section / ವಿಭಾಗ</span>
-            <input id="section" type="text" name="section" required>
+            <input id="section" type="text" name="section" pattern="^[A-Za-z]$" maxlength="1"  title="Only single letter allowed." required>
           </div>
           <div class="input-box">
             <span class="details">District / ಜಿಲ್ಲೆ</span>
-            <input id="district" type="text"   name="district" required>
+            <input id="district" type="text" name="district" pattern="^[A-Za-z]+$" title="Only letters allowed." required>
           </div>
         </div>
     
